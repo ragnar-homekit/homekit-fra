@@ -36,8 +36,8 @@ void temperature_sensor_task(void *_args) {
 
         if (success) {
             printf("Send temperature and humidity characteristics\n");
-            printf("Temperature: %.2f\n", temperature_value);
-            printf("Humidity: %.2f\n", humidity_value);
+            printf("Temperatura: %.2f\n", temperature_value);
+            printf("Umidità: %.2f\n", humidity_value);
 
             temperature.value.float_value = temperature_value;
             humidity.value.float_value = humidity_value;
@@ -49,13 +49,13 @@ void temperature_sensor_task(void *_args) {
         }
 
         // vTaskDelay(3000 / portTICK_PERIOD_MS);
-        // Send data every 5 minutes
+        // Send data every 5 minutes (i dati vengono inviati ogni 5 min)
         delay_ms(1*60000);
     }
 }
 
 void temperature_sensor_init() {
-    xTaskCreate(temperature_sensor_task, "Temperatore Sensor", 256, NULL, 2, NULL);
+    xTaskCreate(temperature_sensor_task, "Sensore Temperatura", 256, NULL, 2, NULL);
 }
 
 void temperature_sensor_identify(homekit_value_t _value) {
@@ -66,8 +66,8 @@ void temperature_sensor_identify(homekit_value_t _value) {
 homekit_accessory_t *accessories[] = {
     HOMEKIT_ACCESSORY(.id=1, .category=homekit_accessory_category_thermostat, .services=(homekit_service_t*[]) {
         HOMEKIT_SERVICE(ACCESSORY_INFORMATION, .characteristics=(homekit_characteristic_t*[]) {
-            HOMEKIT_CHARACTERISTIC(NAME, "DHT22 Sensor"),
-            HOMEKIT_CHARACTERISTIC(MANUFACTURER, "ESP8266"),
+            HOMEKIT_CHARACTERISTIC(NAME, "Sensore DHT22"),
+            HOMEKIT_CHARACTERISTIC(MANUFACTURER, "Fra-ESP"),
             HOMEKIT_CHARACTERISTIC(SERIAL_NUMBER, "0012345"),
             HOMEKIT_CHARACTERISTIC(MODEL, "Model-1"),
             HOMEKIT_CHARACTERISTIC(FIRMWARE_REVISION, FIRMWARE_REVISION),
@@ -75,12 +75,12 @@ homekit_accessory_t *accessories[] = {
             NULL
         }),
         HOMEKIT_SERVICE(TEMPERATURE_SENSOR, .primary=true, .characteristics=(homekit_characteristic_t*[]) {
-            HOMEKIT_CHARACTERISTIC(NAME, "Temperature Sensor"),
+            HOMEKIT_CHARACTERISTIC(NAME, "Sensore Temperatura"),
             &temperature,
             NULL
         }),
         HOMEKIT_SERVICE(HUMIDITY_SENSOR, .characteristics=(homekit_characteristic_t*[]) {
-            HOMEKIT_CHARACTERISTIC(NAME, "Humidity Sensor"),
+            HOMEKIT_CHARACTERISTIC(NAME, "Sensore Umidità"),
             &humidity,
             NULL
         }),
